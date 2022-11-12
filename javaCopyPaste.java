@@ -86,7 +86,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   public int size()
   {
     // TODO Auto-generated method stub
-    return 0;
+    return size;
   }
   
   //offset is logical index, like ht index of all the elements
@@ -176,7 +176,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 		  fIndex += tempNode.count;
 		  tempNode = tempNode.next;
 		  
-		  if(tempNode.node == tail) { // 
+		  if(tempNode == tail) { // 
 			  break;
 		  }
 	  }
@@ -244,7 +244,6 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  
 	  if(pos < 0 || pos > size) {
 		  throw new IndexOutOfBoundsException();
-		  
 	  }
 	  
 	  if(item == null) {
@@ -392,6 +391,34 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   public void sortReverse() 
   {
 	  // TODO 
+	  E[] sortingDataList = (E[]) new Comparable[size];
+	  
+	  Node tempNode = head.next;
+	  int tempIndex = 0;
+	  
+	  
+	  while (tempNode != tail) {
+		  
+		  for (int i = 0; i < tempNode.count; i++) {
+				sortingDataList[tempIndex] = tempNode.data[i];
+				tempIndex++;
+			}
+			tempNode = tempNode.next;
+	  }
+	  
+	  
+	  
+	  
+		head.next = tail;
+		
+		tail.previous = head;
+
+		bubbleSort(sortingDataList);
+		size = 0;
+		for (int i = 0; i < sortingDataList.length; i++) {
+			add(sortingDataList[i]);
+		}
+	  
   }
   
   @Override
@@ -685,10 +712,14 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     	
     	if(lastAction == 1) { //next was last performed, thus we remove behind the cursor
     		currentNode.removeItem(offset);
+    		StoutList.this.remove(index);
+    		//cursorPos ==
+    		//cursorPos
     	}
     	
     	else if(lastAction == 0) { // previous was last performed, thus we remove in front of the cursor
     		currentNode.removeItem(offset);
+    		StoutList.this.remove(index);
     	}
     	
     	
@@ -800,7 +831,23 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
    */
   private void insertionSort(E[] arr, Comparator<? super E> comp)
   {
+	  
 	  // TODO
+	  
+	  for (int i = 1; i < arr.length; i++) {
+		  
+			E key = arr[i];
+			
+			int j = i - 1;
+
+			
+			
+			while (j >= 0 && comp.compare(arr[j], key) > 0) {
+				arr[j + 1] = arr[j];
+				j--;
+			}
+			arr[j + 1] = key;
+		}
   }
   
   /**
@@ -812,7 +859,23 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
    */
   private void bubbleSort(E[] arr)
   {
+	  
 	  // TODO
+	  
+	  int bIndex = arr.length;
+	  
+	  
+		for (int i = 0; i < bIndex - 1; i++) {
+			
+			for (int j = 0; j < bIndex - i - 1; j++) {
+				
+				if (arr[j].compareTo(arr[j + 1]) < 0) {
+					E temp = arr[j];
+					arr[j] = arr[j + 1];
+					arr[j + 1] = temp;
+				}
+			}
+		}
   }
  
 
