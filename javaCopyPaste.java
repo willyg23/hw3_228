@@ -83,6 +83,9 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  this.size = size; 
   }
 
+  
+  // returns size
+  // size it the total amount of elements in the list
   @Override
   public int size()
   {
@@ -90,11 +93,11 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     return size;
   }
   
-  //offset is logical index, like ht index of all the elements
+  
   
   
 
-
+//taken from linkedList.zip on canvas
   /**
    * Inserts newNode into the list after current without
    * updating size.
@@ -108,12 +111,12 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     current.next = newNode;
   }
   
-  
+ 
+//taken from linkedList.zip on canvas
   /**
    * Removes current from the list without
    * updating size.
    */
-
   private void unlink(Node current)
   {
     current.previous.next = current.next;
@@ -125,7 +128,8 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   private class NodeInfo{
 	  
 	  private Node node;
-	  private int offset;
+	  //offset is the index with the node
+	  private int offset; 
 	  
 	  public NodeInfo(Node passedNode, int offset) {
 		  node = passedNode;
@@ -173,11 +177,11 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  int fIndex = 0;
 	  Node tempNode = head.next;
 	  
-	  while(fIndex + tempNode.count <= pos) {
-		  fIndex += tempNode.count;
-		  tempNode = tempNode.next;
+	  while(fIndex + tempNode.count <= pos) {// while not in the node we want
+		  fIndex += tempNode.count; // makes the index equivilent to what the next nodes count will be
+		  tempNode = tempNode.next; // moves to the next node
 		  
-		  if(tempNode == tail) { // 
+		  if(tempNode == tail) { // if we hit the end of the list
 			  break;
 		  }
 	  }
@@ -188,19 +192,17 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   }
   
   @Override
-  public boolean add(E item) throws NullPointerException
+  public boolean add(E item) throws NullPointerException 
   {
     // TODO Auto-generated method stub
-	
-	  //adds a new node in between last node and tail
-	  // where should I use the parameter 'item'?
+	//this adds a new node in between last node and tail
+	  
+	 
 	  /* I feel like this is fucked up somehow?
 	   * if there's more than one node named 'temp' or 'addedNode' in the array that's bad no? // nah that's ok
 	   */
 	  // do I still increment size?
 	  // add throw NullPointerException
-	 
-	  // next and previous are swapped???
 	  
 	  // only adding a node if the last node is full
 	  
@@ -222,16 +224,19 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 		  Node temp; // the node that is formerly the last node of the list (excluding the tail)
 		  Node addedNode = new Node(); // the node that's being added
 		  
-		  temp = tail.previous;
-		  addedNode.previous = temp; 
-		  tail.previous = addedNode;
-		  temp.next = addedNode;
-		  addedNode.next = tail;
+		  
+		  temp = tail.previous; // temp = the last node (excluding the tail)
+		  addedNode.previous = temp; // addedNoded placed after the formerly last node
+		  tail.previous = addedNode; // links tail to addedNode
+		  temp.next = addedNode; // links temp to addedNode
+		  addedNode.next = tail; // links addedNode to tail
 		  
 	  }
 	  
-	  tail.previous.addItem(item);
-	  ++size;
+	  tail.previous.addItem(item); // adds item into the last node of the list excluding the tail
+	  ++size; // increment size of the list
+	  
+	  
 //	  ++tail.previous.count; 
 	  //^ commented this out because addItem(item) already increments count
 	  // so with that line uncommented it would increment twice
@@ -245,22 +250,22 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   {
     // TODO Auto-generated method stub
 	  
-	  if(pos < 0 || pos > size) {
+	  if(pos < 0 || pos > size) { // if pos is out of the list's bounds
 		  throw new IndexOutOfBoundsException();
 	  }
 	  
-	  if(item == null) {
+	  if(item == null) { // don't want to add add a null item to your list
 		  throw new NullPointerException();
 	  }
 	  
-	  //check if empty list: or  
+	  //check if list is empty or  
 	  if(head.next == tail || pos == size) {
 
 	  	// if this happens you need to make a new node. use normal add, that adds to the end of list 
 	  	add(item);
 	  }
   	
-	  NodeInfo nodeInfo = find(pos);
+	  NodeInfo nodeInfo = find(pos); // get information about the node you are adding item to
 	  Node tempNode = nodeInfo.node;
 	  int offset = nodeInfo.offset;
 	  
@@ -276,7 +281,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 			// [1,2,3,4] <-- calling find pos(4) on that will return tail, because tail is still after that 
 
 			else if(tempNode == tail) {
-				add(item); // this add should create a new node to place item in // which add is this using?
+				add(item); // this add should create a new node to place item in ?
 			}
   	
 	  }
@@ -289,10 +294,12 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  
 	  
 	// if the node you want to add to has no space 
-	// cut and paste the last half into a new node. paste the last half that you cut into the first half of the // // new node 
-	//add item to halfPoint *** 
+	// cut and paste the last half into a new node. paste the last half that you cut into the first half of the new node 
+	//add item to halfPoint 
 	else{ 
 		Node newNode = new Node();
+		
+		
 		int halfPoint = nodeSize / 2;
 		int count = 0;
 
@@ -302,27 +309,29 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 			count++;
 		}
 
-		// link the node you orignally wanted to add to, with the node you created 
+		// link the node you originally wanted to add to, with the node you created 
 		link(tempNode,newNode);
 
 		
 		
 		// now we are adding item 
+		// if offset is on the left half or equal to halfPoint
 		if(offset  <= halfPoint) {
 			tempNode.addItem(offset, item);
 			// addItem is a function of node, will automatically shift the others 
 		}
 	 
-
+		// if offset is on the right half to halfPoint
 		if(offset > halfPoint) {
 			tempNode.addItem(offset - halfPoint, item);
+			// addItem is a function of node, will automatically shift the others 
 		}
 	 
 		
 	}
 	  
 	 
-	  size++;
+	  size++; //+1 item in list, so +1 to size
 	  
   }
 
@@ -330,23 +339,35 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   public E remove(int pos)
   {
     // TODO Auto-generated method stub
-		if(pos < 0 || pos >= size) {
+		if(pos < 0 || pos >= size) { // if pos is out of the list's bounds
     		throw new IndexOutOfBoundsException();
     		
     	}
-    	NodeInfo nodeInfo = find(pos);
+    	NodeInfo nodeInfo = find(pos); // get information about the node you are adding item to
     	Node currentNode = nodeInfo.node;
     	int offset = nodeInfo.offset;
-    	E removedElement = currentNode.data[offset];
+    	E removedElement = currentNode.data[offset]; // the element we're removing
     	
+    	
+    	/*
+    	 * if the node you're removing from is the last node
+    	 * and the only has 1 item in it (the item we're removing)
+    	 * then unlink the node completely
+    	 */
     	if(currentNode.next == tail && currentNode.count == 1) {
     		unlink(currentNode);
     	}
     	
-    	
+    	/*
+    	 * if the node you're removing from is the last node
+    	 * or 
+    	 * the node's count you're removing from is greater than nodeSize / 2
+    	 * remove the Item at offset
+    	 */
     	else if(currentNode.next == tail || currentNode.count > nodeSize / 2) {
     		currentNode.removeItem(offset);
     	}
+    	
     	
     	else {
     		Node nextNode = currentNode.next;
@@ -362,11 +383,11 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     				currentNode.addItem(nextNode.data[i]);
     			}
     			
-    			unlink(nextNode);
+    			unlink(nextNode); // unlink the node now that you've added it's items to currentNode
     		}
     	}
 	  
-    size--;
+    size--; // -1 item from list, -1 item from size
     return removedElement;
   }
 
@@ -385,13 +406,14 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  
 	  
 	  // TODO 
+	  // this is a sorting method, sorts everything in non-decreasing order
 	  
 	  E[] sortingDataList = (E[]) new Comparable[size];
 
 	  
 		int tempIndex = 0;
 		
-		Node temp = head.next;
+		Node temp = head.next; // start at the first node in the list
 		while (temp != tail) {
 			
 			for (int i = 0; i < temp.count; i++) {
@@ -400,19 +422,20 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 				tempIndex++;
 				
 			}
-			temp = temp.next;
+			temp = temp.next; // go to the next node
 			
 		}
 
-		head.next = tail;
+		
+		head.next = tail; 
 		tail.previous = head;
-		insertionSort(sortingDataList, new ElementComparator());
+		insertionSort(sortingDataList, new insertionComparator()); // use insertion sort on our data
 		size = 0;
 		
 		
 		for (int i = 0; i < sortingDataList.length; i++) {
 			
-			add(sortingDataList[i]);
+			add(sortingDataList[i]); // add the sorted data back in 
 			
 		}
 	  
@@ -426,14 +449,15 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
    */
   public void sortReverse() 
   {
-	  // TODO 
+	  // TODO
+	  //sorting algorithm that sorts the data in non-increasing order
 	  E[] sortingDataList = (E[]) new Comparable[size];
 	  
 	  Node tempNode = head.next;
 	  int tempIndex = 0;
 	  
 	  
-	  while (tempNode != tail) {
+	  while (tempNode != tail) { // while not at the end of the list
 		  
 		  for (int i = 0; i < tempNode.count; i++) {
 			  
@@ -442,7 +466,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 				
 			}
 		  
-			tempNode = tempNode.next;
+			tempNode = tempNode.next; // go to check the next node
 	  }
 	  
 	  
@@ -452,10 +476,10 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 		
 		tail.previous = head;
 
-		bubbleSort(sortingDataList);
+		bubbleSort(sortingDataList); //
 		size = 0;
 		for (int i = 0; i < sortingDataList.length; i++) {
-			add(sortingDataList[i]);
+			add(sortingDataList[i]); // add the sorted data back in
 		}
 	  
   }
@@ -654,11 +678,11 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	int previous_performed = 0; // lastAction set to previous_performed when previous is performed
 	
 	
-	// k stuff
-	private int index;
-	private int offset;
+	
+	private int index; // the index you are at amongst all elements
+	private int offset; // the index you are at within the node
 	NodeInfo nodeInfo;
-	Node currentNode;
+	Node currentNode; // the node you are going to perform an action on
 	
 	
     /**
@@ -668,9 +692,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     {
     	// TODO 
     	this(0);
-		//    	lastAction = -1;
-		//    	cursorPos = 0;
-    	//toArrayFormat()
+		
     }
 
     /**
@@ -688,16 +710,16 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 //    		lastAction = -1;
 //    		//toArrayFormat()
     	
-    	if(pos < 0 || pos > size) { 
+    	if(pos < 0 || pos > size) { // if pos is out of the list's bounds
     		throw new IndexOutOfBoundsException();
     	}
     	
-    	nodeInfo = find(pos);
+    	nodeInfo = find(pos); // get information on the node will we be performing upon
     	currentNode = nodeInfo.node;
     	index = pos;
     	offset = nodeInfo.offset;
-    	lastAction = -1;
-    	
+    	lastAction = -1; // action is set to unused, so you can't perform set, remove, etc. before doing a next(), previous, etc.
+    					
     	
     }
     
@@ -722,20 +744,18 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     @Override
     public E next()
     {
-    	// TODO 
+    	// TODO     	
     	
-    	// cursor as a node? then you can use cursor.data this is on lecture 21	
-    	
-    	
-    	if(!(hasNext())){ 
+    	if(!(hasNext())){
     		throw new NoSuchElementException();
     	}
     	
-    	lastAction = next_performed;	
+    	lastAction = next_performed; // so other methods can tell that next was last performed
     	
     	//update location before returning 
     	index++;
     	offset++;
+    	
     	return currentNode.data[offset];// return what next just went over
     }
 
@@ -752,8 +772,6 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     	if(lastAction == 1) { //next was last performed, thus we remove behind the cursor
     		currentNode.removeItem(offset);
     		StoutList.this.remove(index);
-    		//cursorPos ==
-    		//cursorPos
     		lastAction = -1; // can't remove twice in a row
     	}
     	
@@ -805,15 +823,15 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 		if(!(hasPrevious())){ 
     		throw new NoSuchElementException();
     	}
-		lastAction = previous_performed;
-		index--;
+		lastAction = previous_performed; // so other methods can tell that previous was last performed
 		
-		//decrement offset too. update location then return current location
+		//decrement index and offset. update location then return current location
+		index--;
 		offset--;
 		
 		// also have a case for if offset == -1, where you'll have to go into the previous node
 		
-		return currentNode.data[offset];
+		return currentNode.data[offset]; // returns what previous just went over
 		
 	}
 
@@ -835,11 +853,11 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	public void set(E e) {
 		// TODO Auto-generated method stub
 		
-		if(lastAction > -1) {
+		if(lastAction > -1) { // if lastAction was adequate for a set to be performed
 			if(lastAction == 0) { // previous
 				
 				//NodeInfo cNOde = find(index - 1);
-				currentNode.previous.data[index] = e; // index instead of offset?
+				currentNode.previous.data[index] = e;
 			}
 			
 			else if(lastAction == 1) { // next
@@ -847,7 +865,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 				currentNode.data[index] = e;
 			}
 		}
-		else {
+		else { // if lastAction wasn't adequate for a set to be performed throw IllegalStateException
 			throw new IllegalStateException();
 		}
 	}
@@ -856,15 +874,15 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	public void add(E e) {
 		// TODO Auto-generated method stub
 		
-		if (e == null) {
+		if (e == null) { // don't want to add a null item
 			throw new NullPointerException();
 		}
 		
 		
 		
-		StoutList.this.add(index, e);
-		index++;
-		lastAction = -1;
+		StoutList.this.add(index, e); // adds to the end of list
+		index++; // index is now on the element you just added
+		lastAction = -1; // can't add, remove, etc. after an add
 		
 		
 		
@@ -887,6 +905,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   {
 	  
 	  // TODO
+	  // an inserstion sort method, sorts the array in non decreasing order
 	  
 	  for (int i = 1; i < arr.length; i++) {
 		  
@@ -904,6 +923,19 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 		}
   }
   
+  
+  
+  // helper class for insertion 
+  //compares two objects
+	class insertionComparator<E extends Comparable<E>> implements Comparator<E> {
+		@Override
+		public int compare(E e0, E e1) {
+			// TODO Auto-generated method stub
+			return e0.compareTo(e1);
+		}
+
+	}
+  
   /**
    * Sort arr[] using the bubble sort algorithm in the NON-INCREASING order. For a 
    * description of bubble sort please refer to Section 6.1 in the project description. 
@@ -915,6 +947,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   {
 	  
 	  // TODO
+	  // bubble sort algorithim which sorts the array in a non-decreasing order
 	  
 	  int bIndex = arr.length;
 	  
@@ -934,6 +967,9 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
  
 
   
+  
+  
+  //batinov's advice on find(pos)
   
   
 //  node info is what is reutrned 
