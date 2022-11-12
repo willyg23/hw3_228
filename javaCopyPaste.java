@@ -59,9 +59,10 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
   {
     if (nodeSize <= 0 || nodeSize % 2 != 0) throw new IllegalArgumentException();
     
-    // dummy nodes
+    // dummy nodes for head and tail
     head = new Node();
     tail = new Node();
+    //linking an empty list
     head.next = tail;
     tail.previous = head;
     this.nodeSize = nodeSize;
@@ -231,7 +232,9 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  
 	  tail.previous.addItem(item);
 	  ++size;
-	  ++tail.previous.count;
+//	  ++tail.previous.count; 
+	  //^ commented this out because addItem(item) already increments count
+	  // so with that line uncommented it would increment twice
 	    
 	    return true;
 	  
