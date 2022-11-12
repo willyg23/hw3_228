@@ -379,7 +379,40 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
    */
   public void sort()
   {
+	  
+	  
 	  // TODO 
+	  
+	  E[] sortingDataList = (E[]) new Comparable[size];
+
+	  
+		int tempIndex = 0;
+		
+		Node temp = head.next;
+		while (temp != tail) {
+			
+			for (int i = 0; i < temp.count; i++) {
+				
+				sortingDataList[tempIndex] = temp.data[i];
+				tempIndex++;
+				
+			}
+			temp = temp.next;
+			
+		}
+
+		head.next = tail;
+		tail.previous = head;
+		insertionSort(sortingDataList, new ElementComparator());
+		size = 0;
+		
+		
+		for (int i = 0; i < sortingDataList.length; i++) {
+			
+			add(sortingDataList[i]);
+			
+		}
+	  
   }
   
   /**
@@ -400,9 +433,12 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	  while (tempNode != tail) {
 		  
 		  for (int i = 0; i < tempNode.count; i++) {
+			  
 				sortingDataList[tempIndex] = tempNode.data[i];
 				tempIndex++;
+				
 			}
+		  
 			tempNode = tempNode.next;
 	  }
 	  
@@ -715,11 +751,13 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     		StoutList.this.remove(index);
     		//cursorPos ==
     		//cursorPos
+    		lastAction = -1; // can't remove twice in a row
     	}
     	
     	else if(lastAction == 0) { // previous was last performed, thus we remove in front of the cursor
     		currentNode.removeItem(offset);
     		StoutList.this.remove(index);
+    		lastAction = -1; // can't remove twice in a row
     	}
     	
     	
@@ -730,7 +768,7 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
     	
     	
     	
-    	lastAction = -1; // can't remove twice in a row
+    	
     }
 
 	@Override
@@ -796,12 +834,13 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 		
 		if(lastAction > -1) {
 			if(lastAction == 0) { // previous
-				//data_list[cursorPos + 1] = e;
+				
+				//NodeInfo cNOde = find(index - 1);
 				currentNode.previous.data[index] = e; // index instead of offset?
 			}
 			
 			else if(lastAction == 1) { // next
-				//data_list[cursorPos - 1] = e;
+				
 				currentNode.data[index] = e;
 			}
 		}
@@ -813,6 +852,18 @@ public class StoutList<E extends Comparable<? super E>> extends AbstractSequenti
 	@Override
 	public void add(E e) {
 		// TODO Auto-generated method stub
+		
+		if (e == null) {
+			throw new NullPointerException();
+		}
+		
+		
+		
+		StoutList.this.add(index, e);
+		index++;
+		lastAction = -1;
+		
+		
 		
 	}
     
